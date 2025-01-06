@@ -26,3 +26,30 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def create_board(rows, cols):
+    """
+    rows x cols の盤面を生成し、初期値を格納して返す。
+    まだ地雷は配置しない。
+    """
+    board = []
+    for _ in range(rows):
+        row = []
+        for _ in range(cols):
+            cell = {
+                'mine': False,   # 地雷があるか
+                'revealed': False,  # 開いているか
+                'flagged': False    # 旗を立てているか
+            }
+            row.append(cell)
+        board.append(row)
+    return board
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    # テスト表示
+    print("盤面の初期状態:", board)
+
+if __name__ == "__main__":
+    main()
