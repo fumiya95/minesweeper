@@ -6,6 +6,42 @@
 
 #python
 # minesweeper.py
+import random
+
+def create_board(rows, cols):
+    board = []
+    for _ in range(rows):
+        row = []
+        for _ in range(cols):
+            cell = {
+                'mine': False,
+                'revealed': False,
+                'flagged': False
+            }
+            row.append(cell)
+        board.append(row)
+    return board
+
+def place_mines(board, rows, cols, mines):
+    """
+    board上に mines 個の地雷をランダムに配置する
+    """
+    total_cells = rows * cols
+    mine_positions = random.sample(range(total_cells), mines)  # インデックスをランダム取得
+
+    for pos in mine_positions:
+        r = pos // cols
+        c = pos % cols
+        board[r][c]['mine'] = True
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+    print("地雷を配置しました。")
+
+if __name__ == "__main__":
+    main()
 
 def main():
   print("テキストベース マインスイーパーを始めます。")
