@@ -1,67 +1,4 @@
-## ステップ1：プロジェクトの初期セットアップ
-
-#1. ディレクトリを作成（例: `minesweeper/`）。
-#2. `minesweeper.py`（メインファイル）と `.gitignore` を用意する。
-#3. 最低限のコードを置いてみる。
-
-#python
-# minesweeper.py
 import random
-
-def create_board(rows, cols):
-    board = []
-    for _ in range(rows):
-        row = []
-        for _ in range(cols):
-            cell = {
-                'mine': False,
-                'revealed': False,
-                'flagged': False
-            }
-            row.append(cell)
-        board.append(row)
-    return board
-
-def place_mines(board, rows, cols, mines):
-    """
-    board上に mines 個の地雷をランダムに配置する
-    """
-    total_cells = rows * cols
-    mine_positions = random.sample(range(total_cells), mines)  # インデックスをランダム取得
-
-    for pos in mine_positions:
-        r = pos // cols
-        c = pos % cols
-        board[r][c]['mine'] = True
-
-def main():
-    rows, cols, mines = 9, 9, 10
-    board = create_board(rows, cols)
-    place_mines(board, rows, cols, mines)
-    print("地雷を配置しました。")
-
-if __name__ == "__main__":
-    main()
-
-def main():
-  print("テキストベース マインスイーパーを始めます。")
-
-if __name__ == "__main__":
-  main()
-
-# minesweeper.py
-
-def main():
-    # ゲームの初期設定
-    rows = 9
-    cols = 9
-    mines = 10
-    print(f"{rows} x {cols} の盤面に地雷を {mines} 個配置します。")
-    # 実際の処理はまだ書かない
-    # ここで設定を変えられるようにするなどの拡張も可能
-
-if __name__ == "__main__":
-    main()
 
 def create_board(rows, cols):
     """
@@ -73,7 +10,7 @@ def create_board(rows, cols):
         row = []
         for _ in range(cols):
             cell = {
-                'mine': False,   # 地雷があるか
+                'mine': False,    # 地雷があるか
                 'revealed': False,  # 開いているか
                 'flagged': False    # 旗を立てているか
             }
@@ -81,11 +18,48 @@ def create_board(rows, cols):
         board.append(row)
     return board
 
+def place_mines(board, rows, cols, mines):
+    """
+    board 上に mines 個の地雷をランダムに配置する
+    """
+    total_cells = rows * cols
+    mine_positions = random.sample(range(total_cells), mines)  # インデックスをランダム取得
+
+    for pos in mine_positions:
+        r = pos // cols
+        c = pos % cols
+        board[r][c]['mine'] = True
+
+def debug_print_board(board, rows, cols):
+    """
+    内部データを可視化するデバッグ用関数。
+    mine: M / それ以外: .
+    """
+    print("=== デバッグ用盤面表示 ===")
+    for r in range(rows):
+        row_str = ""
+        for c in range(cols):
+            if board[r][c]['mine']:
+                row_str += "M "
+            else:
+                row_str += ". "
+        print(row_str)
+    print()
+
 def main():
-    rows, cols, mines = 9, 9, 10
+    # ゲームの初期設定
+    rows, cols, mines = 9, 9, 10  # 9x9の盤面に10個の地雷
+    print(f"{rows} x {cols} の盤面に地雷を {mines} 個配置します。")
+
+    # 盤面の作成
     board = create_board(rows, cols)
-    # テスト表示
-    print("盤面の初期状態:", board)
+
+    # 地雷を配置
+    place_mines(board, rows, cols, mines)
+    print("地雷を配置しました。")
+
+    # デバッグ用に盤面を表示
+    debug_print_board(board, rows, cols)
 
 if __name__ == "__main__":
     main()
