@@ -63,3 +63,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def count_mines_around(board, r, c, rows, cols):
+    """
+    あるマス(r,c)の周囲8マスにいくつ地雷があるか数える
+    """
+    count = 0
+    for dr in [-1, 0, 1]:
+        for dc in [-1, 0, 1]:
+            if dr == 0 and dc == 0:
+                continue
+            nr = r + dr
+            nc = c + dc
+            if 0 <= nr < rows and 0 <= nc < cols:
+                if board[nr][nc]['mine']:
+                    count += 1
+    return count
