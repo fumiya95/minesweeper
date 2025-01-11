@@ -79,3 +79,27 @@ def count_mines_around(board, r, c, rows, cols):
                 if board[nr][nc]['mine']:
                     count += 1
     return count
+def debug_print_board(board, rows, cols):
+    """
+    内部データを可視化するデバッグ用関数。
+    mine: M / flagged: F / revealed: R
+    """
+    for r in range(rows):
+        row_str = ""
+        for c in range(cols):
+            cell = board[r][c]
+            if cell['mine']:
+                row_str += "M "
+            else:
+                row_str += ". "
+        print(row_str)
+    print()
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+    debug_print_board(board, rows, cols)
+
+if __name__ == "__main__":
+    main()
