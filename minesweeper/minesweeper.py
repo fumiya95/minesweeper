@@ -103,3 +103,38 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def get_user_input(rows, cols):
+    """
+    ユーザーから r, c を入力して返す。
+    範囲外の場合は再入力を求める。
+    """
+    while True:
+        user_input = input("行と列をスペース区切りで指定してください (例: 0 0): ")
+        try:
+            r_str, c_str = user_input.split()
+            r = int(r_str)
+            c = int(c_str)
+            if 0 <= r < rows and 0 <= c < cols:
+                return r, c
+            else:
+                print("範囲外です。再入力してください。")
+        except ValueError:
+            print("正しい形式で入力してください。")
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+
+    while True:
+        debug_print_board(board, rows, cols)
+        print("マスを開く座標を指定してください。")
+        r, c = get_user_input(rows, cols)
+        print(f"選択されたマス: ({r}, {c})")
+
+        # （後で開く処理を実装する）
+        # 一旦、入力が永遠に続く状態
+
+if __name__ == "__main__":
+    main()
