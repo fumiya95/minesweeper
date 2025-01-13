@@ -138,3 +138,31 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def reveal_cell(board, r, c, rows, cols):
+    """
+    指定マスを開く処理。
+    地雷なら True（ゲームオーバー）を返す。
+    それ以外なら False。
+    """
+    if board[r][c]['mine']:
+        board[r][c]['revealed'] = True
+        return True  # 地雷を踏んだ
+    board[r][c]['revealed'] = True
+    return False
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+
+    while True:
+        debug_print_board(board, rows, cols)
+        print("マスを開く座標を指定してください。")
+        r, c = get_user_input(rows, cols)
+        
+        if reveal_cell(board, r, c, rows, cols):
+            print("地雷を踏みました！ゲームオーバー！")
+            debug_print_board(board, rows, cols)  # 最後に全体を見せる
+            break
+
