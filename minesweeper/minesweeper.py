@@ -166,3 +166,26 @@ def main():
             debug_print_board(board, rows, cols)  # 最後に全体を見せる
             break
 
+def reveal_cell(board, r, c, rows, cols):
+    if board[r][c]['mine']:
+        board[r][c]['revealed'] = True
+        return True  # 地雷踏んだ
+    
+    # すでに開いてたら何もしない
+    if board[r][c]['revealed']:
+        return False
+    
+    board[r][c]['revealed'] = True
+    # 周囲の地雷数をチェック
+    mine_count = count_mines_around(board, r, c, rows, cols)
+    if mine_count == 0:
+        # 周囲のマスも開く（再帰or BFS）
+        for dr in [-1, 0, 1]:
+            for dc in [-1, 0, 1]:
+                nr = r + dr
+                nc = c + dc
+                if 0 <= nr < rows and 0 <= nc < cols:
+                    reveal_cell(board, nr, nc, rows, cols)
+    
+    return False
+
