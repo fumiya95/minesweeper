@@ -189,3 +189,32 @@ def reveal_cell(board, r, c, rows, cols):
     
     return False
 
+def display_board(board, rows, cols):
+    """
+    ユーザー向けの盤面表示
+    """
+    print("   ", end="")
+    for c in range(cols):
+        print(f"{c:2d} ", end="")
+    print()
+
+    for r in range(rows):
+        print(f"{r:2d} ", end="")
+        for c in range(cols):
+            cell = board[r][c]
+            if cell['revealed']:
+                if cell['mine']:
+                    print("*  ", end="")  # 地雷
+                else:
+                    count = count_mines_around(board, r, c, rows, cols)
+                    print(f"{count}  ", end="")
+            else:
+                if cell['flagged']:
+                    print("F  ", end="")
+                else:
+                    print("■ ", end=" ")  # 閉じているマス
+        print()
+    print()
+
+
+
