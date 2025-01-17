@@ -216,5 +216,22 @@ def display_board(board, rows, cols):
         print()
     print()
 
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+
+    while True:
+        display_board(board, rows, cols)
+        r, c = get_user_input(rows, cols)
+        if reveal_cell(board, r, c, rows, cols):
+            print("地雷を踏みました！ゲームオーバー！")
+            # 全部開いて終了
+            for rr in range(rows):
+                for cc in range(cols):
+                    board[rr][cc]['revealed'] = True
+            display_board(board, rows, cols)
+            break
+
 
 
