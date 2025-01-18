@@ -233,5 +233,52 @@ def main():
             display_board(board, rows, cols)
             break
 
+def get_user_action(rows, cols):
+    """
+    例: "R 2 3" -> (action='R', r=2, c=3)
+        "F 5 1" -> (action='F', r=5, c=1)
+    """
+    while True:
+        user_input = input("操作と座標を指定 (例: R 0 0 / F 0 0): ").strip().upper()
+        parts = user_input.split()
+        if len(parts) != 3:
+            print("入力形式が違います。例: R 0 0")
+            continue
+        action, r_str, c_str = parts
+        if action not in ['R', 'F']:
+            print("操作は 'R'(reveal) か 'F'(flag) のみです。")
+            continue
+        try:
+            r = int(r_str)
+            c = int(c_str)
+            if 0 <= r < rows and 0 <= c < cols:
+                return action, r, c
+            else:
+                print("範囲外です。")
+        except ValueError:
+            print("数字を指定してください。")
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+
+    while True:
+        display_board(board, rows, cols)
+        action, r, c = get_user_action(rows, cols)
+
+        if action == 'F':
+            board[r][c]['flagged'] = not board[r][c]['flagged']
+            continue
+
+        # R の場合
+        if reveal_cell(board, r, c, rows, cols):
+            print("地雷を踏みました！ゲームオーバー！")
+            for rr in range(rows):
+                for cc in range(cols):
+                    board[rr][cc]['revealed'] = True
+            display_board(board, rows, cols)
+            break
+
 
 
