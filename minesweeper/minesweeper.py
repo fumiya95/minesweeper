@@ -280,5 +280,25 @@ def main():
             display_board(board, rows, cols)
             break
 
+def check_victory(board, rows, cols):
+    """
+    まだ開かれていない非地雷マスがあれば False を返す。
+    """
+    for r in range(rows):
+        for c in range(cols):
+            if not board[r][c]['mine'] and not board[r][c]['revealed']:
+                return False
+    return True
+
+def main():
+    # ...
+    while True:
+        display_board(board, rows, cols)
+        if check_victory(board, rows, cols):
+            print("おめでとうございます！すべてのマスを開きました！")
+            break
+        action, r, c = get_user_action(rows, cols)
+        #
+
 
 
