@@ -139,5 +139,23 @@ def main():
                 display_board(board, rows, cols)
                 break
 
+def display_remaining_mines(board, mines):
+    flag_count = 0
+    for row in board:
+        for cell in row:
+            if cell['flagged']:
+                flag_count += 1
+    print(f"残り地雷(推定): {mines - flag_count}")
+
+def main():
+    rows, cols, mines = 9, 9, 10
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+
+    while True:
+        display_board(board, rows, cols)
+        display_remaining_mines(board, mines)
+        # ...
+        
 if __name__ == "__main__":
     main()
