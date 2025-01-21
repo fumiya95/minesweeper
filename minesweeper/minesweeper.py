@@ -156,6 +156,22 @@ def main():
         display_board(board, rows, cols)
         display_remaining_mines(board, mines)
         # ...
+
+def main():
+    difficulty = input("難易度を選んでください (E/M/H): ").strip().upper()
+    if difficulty == 'E':
+        rows, cols, mines = 9, 9, 10
+    elif difficulty == 'M':
+        rows, cols, mines = 16, 16, 40
+    elif difficulty == 'H':
+        rows, cols, mines = 16, 30, 99
+    else:
+        rows, cols, mines = 9, 9, 10  # デフォルト
+
+    board = create_board(rows, cols)
+    place_mines(board, rows, cols, mines)
+    # あとは同じ
         
 if __name__ == "__main__":
     main()
+
