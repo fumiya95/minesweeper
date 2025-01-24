@@ -1,4 +1,14 @@
 import random
+from colorama import init, Fore, Style
+
+init(autoreset=True)
+
+def display_board(board, rows, cols):
+    # ...
+    # 例: 地雷なら赤く表示
+    if cell['mine']:
+        print(Fore.RED + "*  " + Style.RESET_ALL, end="")
+    # ...
 
 def create_board(rows, cols):
     """
