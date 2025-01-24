@@ -3,17 +3,9 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-def display_board(board, rows, cols):
-    # ...
-    # 例: 地雷なら赤く表示
-    if cell['mine']:
-        print(Fore.RED + "*  " + Style.RESET_ALL, end="")
-    # ...
-
 def create_board(rows, cols):
     """
     rows x cols の盤面を生成し、初期値を格納して返す。
-    まだ地雷は配置しない。
     """
     return [[{'mine': False, 'revealed': False, 'flagged': False} for _ in range(cols)] for _ in range(rows)]
 
@@ -23,10 +15,8 @@ def place_mines(board, rows, cols, mines):
     """
     total_cells = rows * cols
     mine_positions = random.sample(range(total_cells), mines)  # インデックスをランダム取得
-
     for pos in mine_positions:
-        r = pos // cols
-        c = pos % cols
+        r, c = divmod(pos, cols)
         board[r][c]['mine'] = True
 
 def count_mines_around(board, r, c, rows, cols):
@@ -78,13 +68,13 @@ def display_board(board, rows, cols):
             cell = board[r][c]
             if cell['revealed']:
                 if cell['mine']:
-                    row_str += "*  "
+                    row_str += Fore.RED + "*  " + Style.RESET_ALL
                 else:
                     count = count_mines_around(board, r, c, rows, cols)
                     row_str += f"{count}  "
             else:
                 if cell['flagged']:
-                    row_str += "F  "
+                    row_str += Fore.YELLOW + "F  " + Style.RESET_ALL
                 else:
                     row_str += "■  "
         print(row_str)
@@ -113,6 +103,13 @@ def get_user_action(rows, cols):
         except ValueError:
             print("正しい形式で入力してください。")
 
+def display_remaining_mines(board, mines):
+    """
+    残り地雷数（推定値）を表示
+    """
+    flagged_cells = sum(cell['flagged'] for row in board for cell in row)
+    print(f"残り地雷(推定): {mines - flagged_cells}")
+
 def check_victory(board, rows, cols):
     """
     まだ開かれていない非地雷マスがあれば False を返す。
@@ -124,50 +121,7 @@ def check_victory(board, rows, cols):
     return True
 
 def main():
-    # ゲームの初期設定
-    rows, cols, mines = 9, 9, 10
-    board = create_board(rows, cols)
-    place_mines(board, rows, cols, mines)
-
-    while True:
-        display_board(board, rows, cols)
-        if check_victory(board, rows, cols):
-            print("おめでとうございます！すべてのマスを開きました！")
-            break
-
-        action, r, c = get_user_action(rows, cols)
-
-        if action == 'F':
-            board[r][c]['flagged'] = not board[r][c]['flagged']
-        elif action == 'R':
-            if reveal_cell(board, r, c, rows, cols):
-                print("地雷を踏みました！ゲームオーバー！")
-                # 全部開いて終了
-                for rr in range(rows):
-                    for cc in range(cols):
-                        board[rr][cc]['revealed'] = True
-                display_board(board, rows, cols)
-                break
-
-def display_remaining_mines(board, mines):
-    flag_count = 0
-    for row in board:
-        for cell in row:
-            if cell['flagged']:
-                flag_count += 1
-    print(f"残り地雷(推定): {mines - flag_count}")
-
-def main():
-    rows, cols, mines = 9, 9, 10
-    board = create_board(rows, cols)
-    place_mines(board, rows, cols, mines)
-
-    while True:
-        display_board(board, rows, cols)
-        display_remaining_mines(board, mines)
-        # ...
-
-def main():
+    # 難易度設定
     difficulty = input("難易度を選んでください (E/M/H): ").strip().upper()
     if difficulty == 'E':
         rows, cols, mines = 9, 9, 10
@@ -176,12 +130,35 @@ def main():
     elif difficulty == 'H':
         rows, cols, mines = 16, 30, 99
     else:
-        rows, cols, mines = 9, 9, 10  # デフォルト
+        rows, cols, mines = 9, 9, 10  # デフォルト設定
 
+    # ゲームの初期化
     board = create_board(rows, cols)
     place_mines(board, rows, cols, mines)
-    # あとは同じ
-        
+
+    # メインゲームループ
+    while True:
+        display_board(board, rows, cols)
+        display_remaining_mines(board, mines)
+
+        # 勝利判定
+        if check_victory(board, rows, cols):
+            print(Fore.GREEN + "おめでとうございます！すべてのマスを開きました！" + Style.RESET_ALL)
+            break
+
+        # ユーザー操作
+        action, r, c = get_user_action(rows, cols)
+
+        if action == 'F':
+            board[r][c]['flagged'] = not board[r][c]['flagged']
+        elif action == 'R':
+            if reveal_cell(board, r, c, rows, cols):
+                print(Fore.RED + "地雷を踏みました！ゲームオーバー！" + Style.RESET_ALL)
+                for rr in range(rows):
+                    for cc in range(cols):
+                        board[rr][cc]['revealed'] = True
+                display_board(board, rows, cols)
+                break
+
 if __name__ == "__main__":
     main()
-
