@@ -160,5 +160,12 @@ def main():
                 display_board(board, rows, cols)
                 break
 
+def main():
+    print("=== テキストベース マインスイーパー (v1.0) ===")
+    difficulty = input("難易度を選んでください (E/M/H): ").strip().upper()
+    # ... 省略 ...
+    print("ゲーム終了！プレイしていただきありがとうございます。")
+
 if __name__ == "__main__":
     main()
+
